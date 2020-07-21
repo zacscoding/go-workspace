@@ -2,6 +2,8 @@ package distributedlock
 
 import (
 	"context"
+	"fmt"
+	"math/rand"
 	"sync"
 	"testing"
 	"time"
@@ -68,4 +70,36 @@ func TestTryLockWithContext(t *testing.T) {
 	cancel()
 
 	wait.Wait()
+}
+
+func TestTryLockWithRace(t *testing.T) {
+	taskId := "task01"
+
+	go func() {
+		doTask("task01", taskId, l)
+	}()
+	go func() {
+		doTask("task02", taskId, l)
+	}()
+	go func() {
+		doTask("task03", taskId, l)
+	}()
+
+	time.Sleep(1 * time.Minute)
+}
+
+func doTask(taskName, taskId string, l LockRegistry) {
+	for {
+		result := l.TryLockWithTimeout(taskId, 1*time.Second)
+		if !result {
+			fmt.Printf("[%s] failed to acquire lock\n", taskName)
+			time.Sleep(1 * time.Second)
+		}
+
+		sleep := rand.Intn(3) + 1
+		fmt.Printf("[%s] success to acquire lock with sleep: %d\n", taskName, sleep)
+		time.Sleep(time.Duration(sleep) * time.Second)
+		fmt.Printf("[%s] release lock\n", taskName)
+		l.Unlock(taskId)
+	}
 }

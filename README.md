@@ -1,5 +1,5 @@
 # Workspace with go :)  
 
-- <a href="">Distributed lock</a>  
+- <a href="distributedlock">Distributed lock</a>  
 ; distributed lock with standalone, redis  
 
