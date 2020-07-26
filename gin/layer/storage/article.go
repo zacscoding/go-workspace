@@ -16,12 +16,7 @@ type articleStorage struct {
 	db *gorm.DB
 }
 
-func NewArticleStorage() (ArticleStorage, error) {
-	db, err := gorm.Open("mysql", "root:password@tcp(127.0.0.1:13306)/my_database?charset=utf8&parseTime=True")
-	if err != nil {
-		return nil, err
-	}
-
+func NewArticleStorage(db *gorm.DB) (ArticleStorage, error) {
 	db.DropTableIfExists(&model.Article{})
 	db.CreateTable(&model.Article{})
 	db.LogMode(true)
