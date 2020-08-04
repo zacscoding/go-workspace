@@ -10,3 +10,6 @@ this repository is my workspace of golang.
 - <a href="orm/gorm">Example of gorm</a>  
 ; example of gorm  
 
+- <a href="client/client1">Rest api client with fasthttp, circuit breaker</a>  
+; example of rest api client with fasthttp and sony/gobreaker for circuit breaker  
+
