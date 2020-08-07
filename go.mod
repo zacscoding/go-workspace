@@ -12,5 +12,6 @@ require (
 	github.com/jinzhu/gorm v1.9.15
 	github.com/sony/gobreaker v0.4.1
 	github.com/stretchr/testify v1.4.0
+	github.com/tidwall/gjson v1.6.0
 	github.com/valyala/fasthttp v1.15.1
 )
