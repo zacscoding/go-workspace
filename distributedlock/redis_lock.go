@@ -22,8 +22,9 @@ type RedisLockRegistry struct {
 
 func NewRedisLockRegistry(client *redis.Client, ttl time.Duration) *RedisLockRegistry {
 	return &RedisLockRegistry{
-		locker: redislock.New(client),
-		ttl:    ttl,
+		locker:  redislock.New(client),
+		lockMap: make(map[string]*lockHolder),
+		ttl:     ttl,
 	}
 }
 
@@ -45,11 +46,13 @@ func (l *RedisLockRegistry) TryLockWithContext(taskId string, ctx context.Contex
 		}
 		l.lockMap[taskId] = holder
 	}
+	l.mutex.Unlock()
 	return holder.tryLock(ctx)
 }
 
 func (l *RedisLockRegistry) Unlock(taskId string) {
 	l.mutex.Lock()
+	defer l.mutex.Unlock()
 	lock, ok := l.lockMap[taskId]
 	if !ok {
 		return
@@ -67,7 +70,8 @@ type lockHolder struct {
 
 func (h *lockHolder) tryLock(ctx context.Context) bool {
 	lock, err := h.locker.Obtain(h.taskId, h.ttl, &redislock.Options{
-		Context: ctx,
+		Context:       ctx,
+		RetryStrategy: redislock.LinearBackoff(1 * time.Second),
 	})
 	if err != nil {
 		return false
@@ -89,28 +93,36 @@ func (h *lockHolder) unlock() {
 	}
 }
 
-// TODO : impl
 func (h *lockHolder) loopRefresh() {
+	prefix := ">>>>>> loopRefresh:"
+	log.Printf("%s start\n", prefix)
 	for {
 		ttl, err := h.lock.TTL()
 		if err != nil {
-			log.Printf("loopRefresh: could not fetch ttl: %v\n", err)
+			log.Printf("%s could not fetch ttl: %v\n", prefix, err)
 			break
+		}
+		if ttl == 0 {
+			log.Printf("%s: zero ttl\n", prefix)
+			return
 		}
 
 		ttlMills := ttl.Milliseconds() - 500
 		if ttlMills < 0 {
 			ttlMills = 1
 		}
+		log.Printf("%s wait %d ms\n", prefix, ttlMills)
 		timer := time.NewTimer(time.Millisecond * time.Duration(ttlMills))
+
 		select {
 		case <-h.cancel:
-			log.Println("loopRefresh: canceled")
+			log.Printf("%s canceled\n", prefix)
 			return
 		case <-timer.C:
+			log.Printf("%s try to refresh\n", prefix)
 			err := h.lock.Refresh(h.ttl, nil)
 			if err != nil {
-				log.Println("loopRefresh: failed to refresh")
+				log.Printf("%s failed to refresh:%v\n", prefix, err.Error())
 			}
 		}
 	}

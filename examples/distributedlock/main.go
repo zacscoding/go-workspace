@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/fatih/color"
+	"github.com/go-redis/redis/v7"
 	"go-workspace/distributedlock"
 
 	"math/rand"
@@ -15,6 +16,15 @@ func main() {
 	runMultipleTask()
 }
 
+var (
+	lock distributedlock.LockRegistry
+)
+
+func init() {
+	// lock = distributedlock.NewStandaloneLockRegistry()
+	lock = newRedisLockRegistry(3 * time.Second)
+}
+
 type Worker struct {
 	lockRegistry distributedlock.LockRegistry
 	TaskId       string
@@ -25,13 +35,14 @@ type Worker struct {
 
 func runSingleTask() {
 	taskId := "task01"
-	lock := distributedlock.NewStandaloneLockRegistry()
+	defer lock.Unlock(taskId)
 	for i := 1; i <= 5; i++ {
 		t := &Worker{
 			lockRegistry: lock,
 			TaskId:       taskId,
 			Name:         "Task" + strconv.Itoa(i),
 			SleepSec:     3,
+			Logger:       newColor(i),
 		}
 		t.DoTask()
 	}
@@ -40,11 +51,11 @@ func runSingleTask() {
 }
 
 func runMultipleTask() {
-	lock := distributedlock.NewStandaloneLockRegistry()
 	taskCount := 3
 	workerCount := 3
 	for i := 1; i <= taskCount; i++ {
 		taskId := "task-" + strconv.Itoa(i)
+		defer lock.Unlock(taskId)
 		for j := 1; j <= workerCount; j++ {
 			workerName := "worker-" + strconv.Itoa(i) + "-" + strconv.Itoa(j)
 			t := &Worker{
@@ -84,4 +95,13 @@ func (w Worker) DoTask() {
 
 func newColor(order int) *color.Color {
 	return color.New(color.Attribute(int(color.FgBlack) + order))
+}
+
+func newRedisLockRegistry(ttl time.Duration) distributedlock.LockRegistry {
+	redisCli := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+	return distributedlock.NewRedisLockRegistry(redisCli, ttl)
 }
