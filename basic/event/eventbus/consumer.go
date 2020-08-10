@@ -1,40 +1,52 @@
 package eventbus
 
-import (
-	"github.com/asaskevich/EventBus"
-	"go-workspace/basic/event"
-)
+import "go-workspace/basic/event"
 
-type Consumer struct {
-	bus     EventBus.Bus
-	onEvent func(e *event.Event)
+type MemberEventCallback func(payload *event.MemberPayload)
+type ArticleEventCallback func(payload *event.ArticlePayload)
+
+type Consumer interface {
+	GetTopic() string
+
+	Callback() interface{}
+
+	UnSubscribe() error
 }
 
-func NewConsumer(bus EventBus.Bus, onEvent func(e *event.Event)) (*Consumer, error) {
-	c := &Consumer{
-		bus:     bus,
-		onEvent: onEvent,
+type MemberConsumer struct {
+	p        *Producer
+	callback interface{}
+}
+
+func (m *MemberConsumer) GetTopic() string {
+	return TopicMember
+}
+
+func (m *MemberConsumer) Callback() interface{} {
+	return m.callback
+}
+
+func (m *MemberConsumer) UnSubscribe() error {
+	return m.p.UnRegister(m)
+}
+
+func NewMemberConsumer(p *Producer, callback MemberEventCallback) (*MemberConsumer, error) {
+	consumer := MemberConsumer{
+		p: p,
+		callback: func(v interface{}) {
+			e, ok := v.(*event.Event)
+			if !ok {
+				return
+			}
+			p, ok := e.Payload.(*event.MemberPayload)
+			if !ok {
+				return
+			}
+			callback(p)
+		},
 	}
-	err := c.bus.Subscribe(string(event.TypeMember), c.callback)
-	if err != nil {
+	if err := p.Register(&consumer); err != nil {
 		return nil, err
 	}
-	err = c.bus.Subscribe(string(event.TypeArticle), c.callback)
-	if err != nil {
-		return nil, err
-	}
-	return c, nil
-}
-
-func (c *Consumer) Close() {
-	_ = c.bus.Unsubscribe(string(event.TypeMember), c.callback)
-	_ = c.bus.Unsubscribe(string(event.TypeArticle), c.callback)
-}
-
-func (c *Consumer) callback(v interface{}) {
-	event, ok := v.(*event.Event)
-	if !ok {
-		return
-	}
-	c.onEvent(event)
+	return &consumer, nil
 }
