@@ -2,18 +2,23 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/asaskevich/EventBus"
 	"github.com/fatih/color"
 	"go-workspace/basic/event"
 	"go-workspace/basic/event/eventbus"
+	"math/rand"
+	"strconv"
 	"strings"
+	"sync"
 	"time"
 )
 
 func main() {
 	// runBasic()
 	// runProducerByPoc1()
-	runProducerByPoc2()
+	// runProducerByPoc2()
+	runProducerByPoc2_1()
 }
 
 func runBasic() {
@@ -117,9 +122,9 @@ func runProducerByPoc2() {
 	// 2) Producer
 	producer := eventbus.NewProducer(bus)
 
-	// 3) consumer1 - upper case
+	// 3) member consumer1 - upper case
 	consumer1, err := eventbus.NewMemberConsumer(producer, func(payload *event.MemberPayload) {
-		prefix := "[member-consumer-upper]"
+		prefix := "member-consumer-upper"
 		c := color.New(color.FgRed)
 		c.Printf("[%s] Name: %s\n", prefix, strings.ToUpper(payload.Name))
 	})
@@ -127,9 +132,9 @@ func runProducerByPoc2() {
 		panic(err)
 	}
 
-	// 4) consumer2 - lower case
+	// 4) member consumer2 - lower case
 	_, err = eventbus.NewMemberConsumer(producer, func(payload *event.MemberPayload) {
-		prefix := "[member-consumer-lower]"
+		prefix := "member-consumer-lower"
 		c := color.New(color.FgRed)
 		c.Printf("[%s] Name: %s\n", prefix, strings.ToLower(payload.Name))
 	})
@@ -137,7 +142,14 @@ func runProducerByPoc2() {
 		panic(err)
 	}
 
-	// 5) publish event
+	// 5) article consumer1
+	_, err = eventbus.NewArticleConsumer(producer, func(payload *event.ArticlePayload) {
+		prefix := "article-consumer"
+		c := color.New(color.FgRed)
+		c.Printf("[%s] Title: %s, Content:%s\n", prefix, payload.Title, payload.Content)
+	})
+
+	// publish member event
 	producer.Publish(&event.Event{
 		Type: event.TypeMember,
 		Payload: &event.MemberPayload{
@@ -148,7 +160,7 @@ func runProducerByPoc2() {
 
 	_ = consumer1.UnSubscribe()
 
-	// 5) publish event
+	// publish member event
 	producer.Publish(&event.Event{
 		Type: event.TypeMember,
 		Payload: &event.MemberPayload{
@@ -157,5 +169,54 @@ func runProducerByPoc2() {
 		},
 	})
 
+	// publish article event
+	producer.Publish(&event.Event{
+		Type: event.TypeArticle,
+		Payload: &event.ArticlePayload{
+			Title:   "ArticleTitle",
+			Content: "ArticleContent",
+		},
+	})
+
 	producer.WaitAsync()
+}
+
+func runProducerByPoc2_1() {
+	// 1) bus
+	bus := EventBus.New()
+
+	// 2) Producer
+	producer := eventbus.NewProducer(bus)
+
+	// 3) slow consumer
+	eventbus.NewMemberConsumer(producer, func(payload *event.MemberPayload) {
+		prefix := "member-consumer-lower"
+		c := color.New(color.FgRed)
+
+		sleep := rand.Intn(5) + 1
+		c.Printf("[%s] receive event. sleep : %d secs\n", prefix, sleep)
+		time.Sleep(time.Duration(sleep) * time.Second)
+		c.Printf("[%s] event: %s\n", prefix, payload)
+	})
+
+	var wait sync.WaitGroup
+	for i := 0; i < 50; i++ {
+		wait.Add(1)
+		go func() {
+			defer wait.Done()
+			name := "Name-" + strconv.Itoa(rand.Intn(100))
+			age := rand.Intn(100)
+
+			started := time.Now()
+			producer.Publish(&event.Event{
+				Type: event.TypeMember,
+				Payload: &event.MemberPayload{
+					Name: name,
+					Age:  age,
+				},
+			})
+			fmt.Printf("Success to produce: %v\n", time.Since(started))
+		}()
+	}
+	wait.Wait()
 }

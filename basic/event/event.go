@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/tidwall/gjson"
 )
 
@@ -30,9 +31,17 @@ type MemberPayload struct {
 	Age  int    `json:"age"`
 }
 
+func (p MemberPayload) String() string {
+	return fmt.Sprintf("MemberPayload{Name:%s, Age:%d}", p.Name, p.Age)
+}
+
 type ArticlePayload struct {
 	Title   string `json:"title"`
 	Content string `json:"content"`
+}
+
+func (p ArticlePayload) String() string {
+	return fmt.Sprintf("ArticlePayload{Title:%s, Content:%s}", p.Title, p.Content)
 }
 
 func (e *Event) UnmarshalJSON(data []byte) error {

@@ -30,6 +30,10 @@ func (p *Producer) Register(consumer Consumer) error {
 	return p.bus.Subscribe(consumer.GetTopic(), consumer.Callback())
 }
 
+func (p *Producer) RegisterAsync(consumer Consumer, transactional bool) error {
+	return p.bus.SubscribeAsync(consumer.GetTopic(), consumer.Callback(), transactional)
+}
+
 func (p *Producer) UnRegister(consumer Consumer) error {
 	return p.bus.Unsubscribe(consumer.GetTopic(), consumer.Callback())
 }

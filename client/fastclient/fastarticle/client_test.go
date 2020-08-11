@@ -1,4 +1,4 @@
-package client1article
+package fastarticle
 
 import (
 	"github.com/stretchr/testify/suite"
