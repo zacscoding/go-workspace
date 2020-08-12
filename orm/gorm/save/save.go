@@ -21,6 +21,7 @@ func init() {
 type Account struct {
 	gorm.Model
 	Name string `gorm:"unique_index; not null"`
+	Age  int    `gorm:"age; null"`
 }
 
 func SaveOrUpdate(acc *Account) error {
