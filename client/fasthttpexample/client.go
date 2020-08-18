@@ -3,6 +3,7 @@ package fasthttpexample
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"time"
 )
 
 func NewArticleServer() *gin.Engine {
@@ -41,6 +42,20 @@ func NewArticleServer() *gin.Engine {
 			},
 		}
 		context.JSON(http.StatusOK, articles)
+	})
+
+	e.GET("/sleep/:sec", func(ctx *gin.Context) {
+		type PathVariable struct {
+			Sleep int `uri:"sec" binding="required"`
+		}
+		var path PathVariable
+		if err := ctx.ShouldBindUri(&path); err != nil {
+			ctx.AbortWithError(http.StatusInternalServerError, err)
+		}
+		time.Sleep(time.Duration(path.Sleep) * time.Second)
+		ctx.AbortWithStatusJSON(http.StatusOK, map[string]interface{}{
+			"status": "ok",
+		})
 	})
 	return e
 }
