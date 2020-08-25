@@ -3,6 +3,7 @@ module go-workspace
 go 1.14
 
 require (
+	github.com/alicebob/miniredis/v2 v2.13.2
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
 	github.com/bsm/redislock v0.5.0
 	github.com/fatih/color v1.9.0
@@ -15,7 +16,7 @@ require (
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.15
-	github.com/pkg/profile v1.5.0
+	github.com/opentracing/opentracing-go v1.2.0
 	github.com/sony/gobreaker v0.4.1
 	github.com/stretchr/testify v1.4.0
 	github.com/tidwall/gjson v1.6.0

@@ -4,6 +4,8 @@ package zaplogger
 
 import (
 	"context"
+	"fmt"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"sync"
@@ -58,5 +60,18 @@ func FromContext(ctx context.Context) *zap.SugaredLogger {
 	if logger, ok := ctx.Value(loggerKey).(*zap.SugaredLogger); ok {
 		return logger
 	}
+	fmt.Println("Not found logger in context")
 	return DefaultLogger()
+}
+
+func WithGinLoggwer(ctx *gin.Context, logger *zap.SugaredLogger) {
+	ctx.Set(loggerKey, logger)
+}
+
+func FromGinContext(ctx *gin.Context) *zap.SugaredLogger {
+	logger, ok := ctx.Get(loggerKey)
+	if !ok {
+		return DefaultLogger()
+	}
+	return logger.(*zap.SugaredLogger)
 }
