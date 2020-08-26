@@ -1,0 +1,8 @@
+{
+  "title": "Read from file!!",
+  "content": "Content!!",
+  "author": {
+    "name": "zaccoding!",
+    "bio": "It is not working!"
+  }
+}

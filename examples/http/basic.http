@@ -1,0 +1,22 @@
+### get request with header
+GET http://localhost:3000/article
+x-request-id: request-id-uuid!!
+
+### post request with payload
+POST http://localhost:3000/article
+Content-Type: application/json
+
+{
+  "title": "Title!!",
+  "content": "Content!!",
+  "author": {
+    "name": "zaccoding!",
+    "bio": "It is not working!"
+  }
+}
+
+### post request with payload read from file
+POST http://localhost:3000/article
+Content-Type: application/json
+
+< ./article_post.json

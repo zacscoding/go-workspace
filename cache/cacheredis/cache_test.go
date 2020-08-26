@@ -1,6 +1,7 @@
 package cacheredis
 
 import (
+	"fmt"
 	"github.com/go-redis/redis/v7"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -105,4 +106,23 @@ func TestHGetHDelete(t *testing.T) {
 	rows, err := delResult.Val(), delResult.Err()
 	assert.NoError(t, err)
 	assert.Equal(t, int64(0), rows)
+}
+
+func TestKeysPattern(t *testing.T) {
+	server, err := NewInmemoryRedisServer()
+	assert.NoError(t, err)
+	client, err := NewRedisClient(&redis.Options{
+		Addr:     server.Addr(),
+		Password: "",
+	})
+	client.HSet("key1:addr:addr1", "field:field1", "key1:addr:addr1+field:field1", time.Second)
+	client.HSet("key1:addr:addr2", "field:field1", "key1:addr:addr2+field:field1", time.Second)
+	client.HSet("key1:addr:addr3", "field:field2", "key1:addr:addr3+field:field2", time.Second)
+	client.HSet("key1:noaddr:addr3", "field:field2", "key1:noaddr:addr3+field:field2", time.Second)
+
+	keys, err := client.cli.Keys("key1:addr:*").Result()
+	assert.NoError(t, err)
+	for _, key := range keys {
+		fmt.Println("## Key:", key)
+	}
 }

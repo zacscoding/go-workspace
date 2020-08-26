@@ -1,0 +1,23 @@
+### https://www.jetbrains.com/help/idea/http-response-handling-examples.html
+GET http://localhost:3000/article
+x-request-id: request-id-uuid!!
+
+> {%
+    client.test("Request executed successfully", function() {
+        client.assert(response.status === 200, "Response status is not 200");
+    });
+
+    client.test("Response article", function (){
+        client.assert(response.body.hasOwnProperty("title"), "Title is not exist")
+        client.assert(response.body.hasOwnProperty("content"), "Content is not exist")
+        client.assert(response.body.hasOwnProperty("author"), "Author is not exist")
+
+        var res = response.body.valueOf();
+        client.log(res.title)
+        client.log(res.content)
+        client.log(res.author.name)
+        client.log(res.author.bio)
+        // client.assert(response.body.hasOwnProperty("author.bio"), "Author.bio is not exist")
+        // client.assert(response.body.hasOwnProperty("author.name"), "Author.name is not exist")
+    });
+%}

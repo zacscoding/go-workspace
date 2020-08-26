@@ -14,5 +14,8 @@ this repository is my workspace of golang.
 ; example of rest api client with fasthttp and sony/gobreaker for circuit breaker  
 
 - <a href="examples/logger/zaploggerbasic">Example of zap logger</a>  
-; Create a new logger with traceId in gin.Server and passed this from context like MDC(mapped diagnostic context)  
+; Create a new logger with traceId in gin.Server and passed this from context like MDC(mapped diagnostic context)
+
+- <a href="examples/http/README.md">Intellij http with gin</a>  
+; Examples of basic http, env http, assert response http with gin server  
 
