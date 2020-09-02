@@ -19,10 +19,13 @@ require (
 	github.com/jinzhu/gorm v1.9.15
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/sony/gobreaker v0.4.1
+	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.6.1
 	github.com/tidwall/gjson v1.6.0
 	github.com/valyala/fasthttp v1.15.1
 	go.uber.org/zap v1.15.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
+	gorm.io/driver/mysql v1.0.1
+	gorm.io/gorm v1.20.0
 )
