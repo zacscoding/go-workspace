@@ -20,6 +20,7 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.15
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/pkg/errors v0.8.1
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.6.1
