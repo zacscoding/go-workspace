@@ -1,7 +1,6 @@
 package workerpool
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"gopkg.in/go-playground/pool.v3"
@@ -10,21 +9,6 @@ import (
 	"testing"
 	"time"
 )
-
-type BatchArticle struct {
-	Id      int
-	Title   string
-	Content string
-	Author  struct {
-		Name string
-		Age  string
-	}
-}
-
-func (a BatchArticle) String() string {
-	b, _ := json.Marshal(a)
-	return string(b)
-}
 
 func TestBatch(t *testing.T) {
 	var articles []*BatchArticle

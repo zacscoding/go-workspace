@@ -16,24 +16,19 @@ import (
 
 func TestConsumerGroup(t *testing.T) {
 	brokers := []string{"localhost:9092"}
-	topic := "sample-message"
+	topic := fmt.Sprintf("sample-message-%d", time.Now().Unix())
 	groupId := fmt.Sprintf("group-%d", time.Now().Unix())
 
 	// setup topics by admin
 	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())
 	assert.NoError(t, err)
-	topics, err := admin.ListTopics()
-	assert.NoError(t, err)
-	if _, ok := topics[topic]; ok {
-		err = admin.DeleteTopic(topic)
-		assert.NoError(t, err)
-		time.Sleep(100 * time.Millisecond)
-	}
 	err = admin.CreateTopic(topic, &sarama.TopicDetail{
 		NumPartitions:     1,
 		ReplicationFactor: 1,
 	}, false)
 	assert.NoError(t, err)
+
+	admin.
 
 	// setup producer
 	pCfg := sarama.NewConfig()
@@ -121,6 +116,11 @@ func (c *Consumer) ConsumeClaim(session sarama.ConsumerGroupSession, claim saram
 			headers[string(header.Key)] = string(header.Value)
 		}
 		m["headers"] = headers
+		m["metadata"] = map[string]interface{}{
+			"topic":     msg.Topic,
+			"partition": msg.Partition,
+			"offset":    msg.Offset,
+		}
 		m["key"] = string(msg.Key)
 		m["message"] = string(msg.Value)
 		b, _ := json.Marshal(m)

@@ -8,6 +8,7 @@ require (
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
 	github.com/bsm/redislock v0.5.0
 	github.com/fatih/color v1.9.0
+	github.com/gammazero/workerpool v1.1.1
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
@@ -18,8 +19,10 @@ require (
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.15
+	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/pkg/errors v0.8.1
-	github.com/prometheus/client_golang v1.7.1
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
