@@ -3,9 +3,11 @@ package workerpool
 import (
 	"fmt"
 	"github.com/gammazero/workerpool"
+	"log"
 	"math/rand"
 	"strconv"
 	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 )
@@ -20,48 +22,45 @@ func TestBatch2(t *testing.T) {
 		})
 	}
 
-	var (
-		doneChan   = make(chan struct{})
-		cancelChan = make(chan struct{})
-	)
-	wp := workerpool.New(3)
-
-	wg := sync.WaitGroup{}
-	wg.Add(len(articles))
-
+	wp := workerpool.New(2)
+	mutex := sync.Mutex{}
+	var errs []error
+	hasErr := int32(0)
 	for _, article := range articles {
 		article := article
 		wp.Submit(func() {
-			defer wg.Wait()
-			if fetchArticle(article) != nil {
-				cancelChan <- struct{}{}
-				wp.Stop()
+			if !atomic.CompareAndSwapInt32(&hasErr, 0, 0) {
+				log.Println("skip to fetch article:", article.String())
+				return
+			}
+			if err := fetchArticle(article); err != nil {
+				mutex.Lock()
+				errs = append(errs, err)
+				mutex.Unlock()
+				log.Println("Find error..")
+				atomic.CompareAndSwapInt32(&hasErr, 0, 1)
 			}
 		})
 	}
-
-	go func() {
-		wg.Wait()
-		doneChan <- struct{}{}
-	}()
-
-	select {
-	case <-doneChan:
-		fmt.Println("Complete to work!")
-	case <-cancelChan:
-		fmt.Println("Canceled work!")
+	log.Println("complete to submit")
+	wp.StopWait()
+	if len(errs) == 0 {
+		log.Println("complete to stop wait.")
+	} else {
+		log.Println("complete to stop wait with error")
 	}
 	time.Sleep(10 * time.Second)
 }
 
 func fetchArticle(a *BatchArticle) error {
 	sleepSec := rand.Intn(3) + 1
-	fmt.Printf("Start to get article %s's author. slee: %d secs\n", a, sleepSec)
+	log.Printf("Start to get article %s's author. slee: %d secs\n", a, sleepSec)
 
 	time.Sleep(time.Duration(sleepSec) * time.Second)
 	if rand.Intn(10) == 1 {
-		// fmt.Println("Return force error")
-		// return errors.New("force err")
+		log.Println("Return force error")
+		//return errors.New("force err")
+		return fmt.Errorf("force error")
 	}
 	return nil
 }
