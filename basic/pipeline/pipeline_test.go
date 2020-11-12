@@ -32,7 +32,6 @@ var (
 				case multipliedStream <- i * multiplier:
 				}
 			}
-
 		}()
 		return multipliedStream
 	}

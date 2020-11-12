@@ -1,6 +1,7 @@
 package workerpool
 
 import (
+	"context"
 	"fmt"
 	"github.com/gammazero/workerpool"
 	"log"
@@ -22,14 +23,18 @@ func TestBatch2(t *testing.T) {
 		})
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 3 * time.Second)
+	defer cancel()
 	wp := workerpool.New(2)
+	wp.Pause(ctx)
+
 	mutex := sync.Mutex{}
 	var errs []error
 	hasErr := int32(0)
-	for _, article := range articles {
+	for i, article := range articles {
 		article := article
 		wp.Submit(func() {
-			if !atomic.CompareAndSwapInt32(&hasErr, 0, 0) {
+			if atomic.LoadInt32(&hasErr) == 1 {
 				log.Println("skip to fetch article:", article.String())
 				return
 			}
@@ -41,6 +46,9 @@ func TestBatch2(t *testing.T) {
 				atomic.CompareAndSwapInt32(&hasErr, 0, 1)
 			}
 		})
+		if i == len(articles)-1 {
+			cancel()
+		}
 	}
 	log.Println("complete to submit")
 	wp.StopWait()
