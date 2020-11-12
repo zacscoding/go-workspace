@@ -28,8 +28,6 @@ func TestConsumerGroup(t *testing.T) {
 	}, false)
 	assert.NoError(t, err)
 
-	admin.
-
 	// setup producer
 	pCfg := sarama.NewConfig()
 	pCfg.Producer.Return.Successes = true

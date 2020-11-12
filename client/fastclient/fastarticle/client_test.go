@@ -27,7 +27,7 @@ func TestSuite(t *testing.T) {
 }
 
 func (s *ClientSuite) TestGetArticles() {
-	articles, err := s.client.GetArticles(0, 0)
+	articles, err := s.client.GetArticles(s.endpoint, 0, 0)
 	s.NoError(err)
 	s.Equal(5, len(articles))
 }
