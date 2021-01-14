@@ -35,7 +35,6 @@ require (
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	github.com/valyala/fasthttp v1.15.1
-	go.opentelemetry.io/otel v0.11.0
 	go.uber.org/fx v1.13.1
 	go.uber.org/zap v1.15.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
