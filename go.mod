@@ -39,6 +39,7 @@ require (
 	go.uber.org/zap v1.15.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
-	gorm.io/driver/mysql v1.0.1
-	gorm.io/gorm v1.20.1
+	gorm.io/driver/mysql v1.0.3
+	gorm.io/gorm v1.20.11
+	gorm.io/plugin/dbresolver v1.1.0
 )

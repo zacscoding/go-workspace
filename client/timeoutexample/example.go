@@ -18,7 +18,7 @@ import (
 Client -> Server -> ReverseProxy -> RemoteServer
 Client <----------- ReverseProxy <- RemoteServer
 */
-func startProxyServer(addr, targetRawUrl string, serverReadTimeout, serverWriteTimeout, proxyDialTimeout time.Duration) {
+func startProxyServer(logging bool, addr, targetRawUrl string, serverReadTimeout, serverWriteTimeout, proxyDialTimeout time.Duration) {
 	targetUrl, _ := url.Parse(targetRawUrl)
 	proxy := httputil.NewSingleHostReverseProxy(targetUrl)
 	proxy.Transport = &http.Transport{
@@ -29,13 +29,14 @@ func startProxyServer(addr, targetRawUrl string, serverReadTimeout, serverWriteT
 			DualStack: true,
 		}).DialContext,
 		ForceAttemptHTTP2:     true,
-		MaxIdleConns:          1000,
-		MaxIdleConnsPerHost:   1000,
+		MaxConnsPerHost:       2,
+		MaxIdleConns:          2,
+		MaxIdleConnsPerHost:   2,
 		IdleConnTimeout:       30 * time.Second,
 		TLSHandshakeTimeout:   10 * time.Second,
 		ExpectContinueTimeout: 1 * time.Second,
 	}
-	http.HandleFunc("/", reverseProxyHandler(proxy))
+	http.HandleFunc("/", reverseProxyHandler(logging, proxy))
 	server := &http.Server{
 		Addr:         addr,
 		ReadTimeout:  serverReadTimeout,
@@ -46,25 +47,30 @@ func startProxyServer(addr, targetRawUrl string, serverReadTimeout, serverWriteT
 	}
 }
 
-func reverseProxyHandler(p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
+func reverseProxyHandler(logging bool, p *httputil.ReverseProxy) func(http.ResponseWriter, *http.Request) {
 	return func(rw http.ResponseWriter, r *http.Request) {
-		log.Printf("[Proxy] Call %s %s", r.Method, r.RequestURI)
+		if logging {
+			log.Printf("[Proxy] Call %s %s", r.Method, r.RequestURI)
+		}
+
 		r.Header.Set("X-Custom", "ReverseProxy")
 		p.ServeHTTP(rw, r)
 	}
 }
 
-func startRemoteServer(addr string) {
+func startRemoteServer(logging bool, addr string) {
 	e := gin.New()
 	e.POST("/reverse", func(ctx *gin.Context) {
 		// logging request info
-		log.Printf("[Remote-Server] Call POST %s", ctx.Request.RequestURI)
-		log.Println("> Headers")
-		for key, values := range ctx.Request.Header {
-			log.Printf(">> Key:%s, Values:%s", key, strings.Join(values, ","))
+		if logging {
+			log.Printf("[Remote-Server] Call POST %s", ctx.Request.RequestURI)
+			log.Println("> Headers")
+			for key, values := range ctx.Request.Header {
+				log.Printf(">> Key:%s, Values:%s", key, strings.Join(values, ","))
+			}
+			bytes, _ := ioutil.ReadAll(ctx.Request.Body)
+			log.Printf("> Body : %s", string(bytes))
 		}
-		bytes, _ := ioutil.ReadAll(ctx.Request.Body)
-		log.Printf("> Body : %s", string(bytes))
 
 		// sleep if exist query
 		sleepQuery := ctx.Query("sleep")
