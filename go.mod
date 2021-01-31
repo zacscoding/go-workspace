@@ -22,6 +22,8 @@ require (
 	github.com/google/uuid v1.1.1
 	github.com/jinzhu/gorm v1.9.15
 	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
+	github.com/k0kubun/pp v3.0.1+incompatible
 	github.com/mattn/go-sqlite3 v1.14.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
@@ -34,7 +36,7 @@ require (
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
-	github.com/valyala/fasthttp v1.15.1
+	github.com/valyala/fasthttp v1.19.0
 	go.uber.org/fx v1.13.1
 	go.uber.org/zap v1.15.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
