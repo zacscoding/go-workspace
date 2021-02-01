@@ -38,6 +38,7 @@ require (
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	github.com/valyala/fasthttp v1.19.0
 	go.uber.org/fx v1.13.1
+	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
