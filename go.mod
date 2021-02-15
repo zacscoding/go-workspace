@@ -19,7 +19,9 @@ require (
 	github.com/go-redsync/redsync/v4 v4.0.3
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gojektech/heimdall/v6 v6.1.0
+	github.com/google/go-github/v33 v33.0.0
 	github.com/google/uuid v1.1.1
+	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
