@@ -53,6 +53,15 @@ func (c *MessageConsumer) loopConsume() {
 }
 
 func (c *MessageConsumer) GetMetadata() map[string]interface{} {
+	//ownership := make(map[string][]int32)
+	//for topic, v := range c.ownership {
+	//	for partition := range v {
+	//		ownership[topic] = append(ownership[topic], partition)
+	//	}
+	//	sort.Slice(ownership[topic], func(i, j int) bool {
+	//		return ownership[topic][i] < ownership[topic][j]
+	//	})
+	//}
 	return map[string]interface{}{
 		"name":      c.name,
 		"memberId":  c.memberId,

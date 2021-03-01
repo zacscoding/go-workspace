@@ -21,6 +21,11 @@ const (
 	groupId         = "local-test"
 )
 
+var (
+	// strategy = sarama.BalanceStrategyRange
+	strategy = sarama.BalanceStrategyRoundRobin
+)
+
 func init() {
 	brokers = []string{"localhost:9092"}
 	now := time.Now().Unix()
@@ -36,7 +41,7 @@ func main() {
 	}
 	var producers []*MessageProducer
 	for _, topic := range topics {
-		p, err := NewMessageProducer(brokers, topic, time.Second)
+		p, err := NewMessageProducer(brokers, topic, 200*time.Millisecond)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -49,7 +54,7 @@ func main() {
 	}()
 	consumers := make(map[string]*MessageConsumer)
 	e := gin.Default()
-	e.POST("/:name/start", func(ctx *gin.Context) {
+	e.POST("/consumer/:name/start", func(ctx *gin.Context) {
 		name, err := bindNameFromURI(ctx)
 		if err != nil {
 			return
@@ -69,7 +74,7 @@ func main() {
 		}
 		consumers[c.name] = c
 	})
-	e.POST("/:name/stop", func(ctx *gin.Context) {
+	e.POST("/consumer/:name/stop", func(ctx *gin.Context) {
 		name, err := bindNameFromURI(ctx)
 		if err != nil {
 			return
@@ -87,7 +92,7 @@ func main() {
 			"message": "success to stop consumer:" + name,
 		})
 	})
-	e.GET("/", func(ctx *gin.Context) {
+	e.GET("/ownership", func(ctx *gin.Context) {
 		var ret []map[string]interface{}
 		for _, consumer := range consumers {
 			ret = append(ret, consumer.GetMetadata())
@@ -95,10 +100,8 @@ func main() {
 		sort.Slice(ret, func(i, j int) bool {
 			return strings.Compare(ret[i]["memberId"].(string), ret[j]["memberId"].(string)) < 0
 		})
-
 		ctx.JSON(http.StatusOK, ret)
 	})
-
 	if err := e.Run(":8880"); err != nil {
 		log.Fatal(err)
 	}
@@ -107,9 +110,9 @@ func main() {
 func newConsumerConfigs() *sarama.Config {
 	cfg := sarama.NewConfig()
 	//cfg.Version = sarama.MaxVersion
-	cfg.Consumer.Offsets.AutoCommit.Enable = false
-	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
-	cfg.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRange
+	cfg.Consumer.Offsets.AutoCommit.Enable = true
+	cfg.Consumer.Offsets.Initial = sarama.OffsetNewest
+	cfg.Consumer.Group.Rebalance.Strategy = strategy
 	return cfg
 }
 

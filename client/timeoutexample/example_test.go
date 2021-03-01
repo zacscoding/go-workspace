@@ -84,7 +84,7 @@ func TestReverseProxy(t *testing.T) {
 	)
 
 	// 1) start remote server
-	go startRemoteServer(true, ":8000")
+	// go startRemoteServer(true, ":8000")
 	go startProxyServer(true, ":8890", "http://localhost:8000", serverReadTimeout, serverWriteTimeout, proxyDialerTimeout)
 
 	// 2) define call func

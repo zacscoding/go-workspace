@@ -8,8 +8,12 @@ import (
 	"github.com/valyala/fasthttp"
 	"go.uber.org/ratelimit"
 	"net/http"
-	"net/url"
 	"time"
+)
+
+var (
+	ErrNoMethod = errors.New("require method in request")
+	ErrNoUrl    = errors.New("require url in request")
 )
 
 var defaultRetryableCodes = map[int]struct{}{
@@ -56,7 +60,6 @@ type HttpClient interface {
 	Delete(ctx context.Context, url string, body []byte, header http.Header) (int, []byte, error)
 	DeleteWithOpt(ctx context.Context, opt *RequestOpt) (int, []byte, error)
 	Do(ctx context.Context, opt *RequestOpt) (int, []byte, error)
-	NewUriBuilder() *UriBuilder
 }
 
 type httpClient struct {
@@ -64,15 +67,10 @@ type httpClient struct {
 	hooks   []Hook
 	limiter ratelimit.Limiter
 	backoff func() retry.Backoff
-	baseURL *url.URL
 }
 
 func (c *httpClient) Get(ctx context.Context, url string, header http.Header) (int, []byte, error) {
-	return c.do(ctx, &RequestOpt{
-		Method: "GET",
-		Url:    url,
-		Header: header,
-	})
+	return c.do(ctx, c.newDefaultRequestOpt("GET", url, nil, header))
 }
 
 func (c *httpClient) GetWithOpt(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
@@ -81,12 +79,7 @@ func (c *httpClient) GetWithOpt(ctx context.Context, opt *RequestOpt) (int, []by
 }
 
 func (c *httpClient) Post(ctx context.Context, url string, body []byte, header http.Header) (int, []byte, error) {
-	return c.do(ctx, &RequestOpt{
-		Method: "POST",
-		Url:    url,
-		Header: header,
-		Body:   body,
-	})
+	return c.do(ctx, c.newDefaultRequestOpt("POST", url, body, header))
 }
 
 func (c *httpClient) PostWithOpt(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
@@ -95,12 +88,7 @@ func (c *httpClient) PostWithOpt(ctx context.Context, opt *RequestOpt) (int, []b
 }
 
 func (c *httpClient) Put(ctx context.Context, url string, body []byte, header http.Header) (int, []byte, error) {
-	return c.do(ctx, &RequestOpt{
-		Method: "PUT",
-		Url:    url,
-		Header: header,
-		Body:   body,
-	})
+	return c.do(ctx, c.newDefaultRequestOpt("PUT", url, body, header))
 }
 
 func (c *httpClient) PutWithOpt(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
@@ -109,12 +97,7 @@ func (c *httpClient) PutWithOpt(ctx context.Context, opt *RequestOpt) (int, []by
 }
 
 func (c *httpClient) Delete(ctx context.Context, url string, body []byte, header http.Header) (int, []byte, error) {
-	return c.do(ctx, &RequestOpt{
-		Method: "DELETE",
-		Url:    url,
-		Header: header,
-		Body:   body,
-	})
+	return c.do(ctx, c.newDefaultRequestOpt("DELETE", url, body, header))
 }
 
 func (c *httpClient) DeleteWithOpt(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
@@ -123,21 +106,30 @@ func (c *httpClient) DeleteWithOpt(ctx context.Context, opt *RequestOpt) (int, [
 }
 
 func (c *httpClient) Do(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
+	return c.do(ctx, opt)
+}
 
+func (c *httpClient) newDefaultRequestOpt(method, url string, body []byte, header http.Header) *RequestOpt {
+	return &RequestOpt{
+		Method:          method,
+		Url:             url,
+		Body:            body,
+		Header:          header,
+		Hooks:           c.hooks,
+		AcceptableCodes: defaultAcceptableCodes,
+		ExtraCodes:      defaultRetryableCodes,
+	}
 }
 
 func (c *httpClient) do(ctx context.Context, opt *RequestOpt) (int, []byte, error) {
 	if opt.Method == "" {
-		return 0, nil, errors.New("require method in request option")
+		return 0, nil, ErrNoMethod
 	}
 	if opt.Url == "" {
-		return 0, nil, errors.New("require url in request option")
+		return 0, nil, ErrNoUrl
 	}
 	if opt.Header == nil {
 		opt.Header = make(http.Header)
-	}
-	if len(opt.Hooks) == 0 {
-		opt.Hooks = c.hooks
 	}
 	var (
 		statusCode    int
@@ -192,10 +184,6 @@ func (c *httpClient) do(ctx context.Context, opt *RequestOpt) (int, []byte, erro
 		return 0, []byte{}, err
 	}
 	return statusCode, respBodyBytes, nil
-}
-
-func (c *httpClient) NewUriBuilder() *UriBuilder {
-	panic("implement me")
 }
 
 func buildRequest(req *fasthttp.Request, opt *RequestOpt) {
@@ -295,18 +283,13 @@ func Limiter(rate int) ClientOption {
 	}
 }
 
-func NewHttpClient(baseURL string, opts ...ClientOption) (HttpClient, error) {
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return nil, err
-	}
+func NewHttpClient(opts ...ClientOption) (HttpClient, error) {
 	cli := httpClient{
 		cli:     &fasthttp.Client{},
 		limiter: ratelimit.NewUnlimited(),
 		backoff: func() retry.Backoff {
 			return &noopBackoff{}
 		},
-		baseURL: u,
 	}
 	for _, opt := range opts {
 		opt(&cli)

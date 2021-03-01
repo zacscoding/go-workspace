@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
+	github.com/Jeffail/gabs/v2 v2.6.0
 	github.com/Shopify/sarama v1.27.1
 	github.com/alicebob/miniredis/v2 v2.13.2
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
@@ -20,6 +21,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/go-github/v33 v33.0.0
+	github.com/google/go-querystring v1.0.0
 	github.com/google/uuid v1.1.1
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jinzhu/gorm v1.9.15

@@ -1,0 +1,309 @@
+------------------------------------------------------------------------------
+> Start consumer-1
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {},
+        "1": {},
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "0": {},
+        "1": {},
+        "2": {}
+      }
+    }
+  }
+]
+------------------------------------------------------------------------------
+> Start consumer-2
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {},
+        "1": {}
+      },
+      "sample-message-1613436031": {
+        "0": {},
+        "1": {}
+      }
+    }
+  }
+]
+------------------------------------------------------------------------------
+> Start consumer-3
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-86ec4475-ce7f-4673-bb44-f86e2807bdad",
+    "name": "consumer-3",
+    "ownership": {
+      "sample-message-1613436030": {
+        "1": {}
+      },
+      "sample-message-1613436031": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {}
+      },
+      "sample-message-1613436031": {
+        "1": {}
+      }
+    }
+  }
+]
+
+------------------------------------------------------------------------------
+> Start consumer-4
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-49d98c89-697e-4a5e-bda2-4df21dd958d1",
+    "name": "consumer-4",
+    "ownership": {
+      "sample-message-1613436031": {
+        "1": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-86ec4475-ce7f-4673-bb44-f86e2807bdad",
+    "name": "consumer-3",
+    "ownership": {
+      "sample-message-1613436030": {
+        "1": {}
+      },
+      "sample-message-1613436031": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {}
+      }
+    }
+  }
+]
+
+------------------------------------------------------------------------------
+> Start consumer-5
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-49d98c89-697e-4a5e-bda2-4df21dd958d1",
+    "name": "consumer-4",
+    "ownership": {}
+  },
+  {
+    "memberId": "sarama-83387651-d756-431a-aef6-2e014a91f843",
+    "name": "consumer-5",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {}
+      },
+      "sample-message-1613436031": {
+        "1": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-86ec4475-ce7f-4673-bb44-f86e2807bdad",
+    "name": "consumer-3",
+    "ownership": {
+      "sample-message-1613436030": {
+        "1": {}
+      },
+      "sample-message-1613436031": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {}
+  }
+]
+
+------------------------------------------------------------------------------
+> Start consumer-6
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {}
+  },
+  {
+    "memberId": "sarama-49d98c89-697e-4a5e-bda2-4df21dd958d1",
+    "name": "consumer-4",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      },
+      "sample-message-1613436031": {
+        "1": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-83387651-d756-431a-aef6-2e014a91f843",
+    "name": "consumer-5",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-86ec4475-ce7f-4673-bb44-f86e2807bdad",
+    "name": "consumer-3",
+    "ownership": {
+      "sample-message-1613436031": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-99ccb2e6-a182-41c6-8634-c9daff9eafdf",
+    "name": "consumer-6",
+    "ownership": {}
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {
+      "sample-message-1613436030": {
+        "1": {}
+      },
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  }
+]
+
+
+------------------------------------------------------------------------------
+> Start consumer-7
+[
+  {
+    "memberId": "sarama-16c3f948-b44c-4533-ac80-958190158b10",
+    "name": "consumer-1",
+    "ownership": {
+      "sample-message-1613436030": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-49d98c89-697e-4a5e-bda2-4df21dd958d1",
+    "name": "consumer-4",
+    "ownership": {
+      "sample-message-1613436031": {
+        "1": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-83387651-d756-431a-aef6-2e014a91f843",
+    "name": "consumer-5",
+    "ownership": {}
+  },
+  {
+    "memberId": "sarama-86ec4475-ce7f-4673-bb44-f86e2807bdad",
+    "name": "consumer-3",
+    "ownership": {
+      "sample-message-1613436030": {
+        "1": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-99ccb2e6-a182-41c6-8634-c9daff9eafdf",
+    "name": "consumer-6",
+    "ownership": {
+      "sample-message-1613436030": {
+        "0": {}
+      },
+      "sample-message-1613436031": {
+        "0": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-cef8b2f4-93d7-4437-9f69-e7ff4cf7cd03",
+    "name": "consumer-2",
+    "ownership": {
+      "sample-message-1613436031": {
+        "2": {}
+      }
+    }
+  },
+  {
+    "memberId": "sarama-f664ecb5-fe4b-4c03-aa34-fb14a7d1569a",
+    "name": "consumer-7",
+    "ownership": {}
+  }
+]

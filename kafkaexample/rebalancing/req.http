@@ -1,7 +1,31 @@
 ### Send POST request with json body
-POST http://localhost:8880/consumer-5/start
+POST http://localhost:8880/consumer/consumer-1/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-2/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-3/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-4/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-5/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-6/start
+Content-Type: application/json
+
+### Send POST request with json body
+POST http://localhost:8880/consumer/consumer-7/start
 Content-Type: application/json
 
 
 ### Send POST request with json body
-GET http://localhost:8880/
+GET http://localhost:8880/ownership
