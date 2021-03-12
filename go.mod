@@ -9,6 +9,8 @@ require (
 	github.com/alicebob/miniredis/v2 v2.13.2
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
 	github.com/bsm/redislock v0.5.0
+	github.com/cloudevents/sdk-go/protocol/kafka_sarama/v2 v2.3.1
+	github.com/cloudevents/sdk-go/v2 v2.3.1
 	github.com/fatih/color v1.9.0
 	github.com/gammazero/workerpool v1.1.1
 	github.com/gin-contrib/pprof v1.3.0
@@ -22,6 +24,7 @@ require (
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
+	github.com/google/gofuzz v1.2.0
 	github.com/google/uuid v1.1.1
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jinzhu/gorm v1.9.15
@@ -32,7 +35,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/pkg/errors v0.8.1
+	github.com/pkg/errors v0.9.1
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
