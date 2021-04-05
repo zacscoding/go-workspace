@@ -25,7 +25,7 @@ require (
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
-	github.com/google/uuid v1.1.1
+	github.com/google/uuid v1.1.2
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/json-iterator/go v1.1.10 // indirect
@@ -47,6 +47,8 @@ require (
 	go.uber.org/fx v1.13.1
 	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
+	google.golang.org/grpc v1.36.1
+	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
 	gorm.io/driver/mysql v1.0.3
