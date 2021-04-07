@@ -1,4 +1,4 @@
-package opentracing
+package ginexample
 
 import (
 	"fmt"

@@ -2,7 +2,7 @@
 
 ## Simple  
 [source](./simple)  
-Simple GRPC Server/Client  
+Simple gRPC Server/Client.
 
 > Generate gRPC code  
 
@@ -10,10 +10,11 @@ Simple GRPC Server/Client
 $ protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     simple/hello/hello_service.proto
-```  
+```
 
 ## Route Guide  
 [source](./route)  
+
 
 > Generate gRPC code  
 

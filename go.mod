@@ -26,6 +26,7 @@ require (
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
 	github.com/google/uuid v1.1.2
+	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jinzhu/gorm v1.9.15
 	github.com/json-iterator/go v1.1.10 // indirect
