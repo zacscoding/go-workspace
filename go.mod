@@ -21,6 +21,7 @@ require (
 	github.com/go-redis/redis/v8 v8.1.1
 	github.com/go-redsync/redsync/v4 v4.0.3
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/go-testfixtures/testfixtures/v3 v3.5.0
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
@@ -32,6 +33,7 @@ require (
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/k0kubun/pp v3.0.1+incompatible
+	github.com/lib/pq v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
