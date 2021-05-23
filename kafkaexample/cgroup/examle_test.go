@@ -14,6 +14,25 @@ import (
 	"time"
 )
 
+func TestTopic(t *testing.T) {
+	brokers := []string{"localhost:9092"}
+	topic := fmt.Sprintf("sample-message-%d", time.Now().Unix())
+	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())
+	assert.NoError(t, err)
+	err = admin.CreateTopic(topic, &sarama.TopicDetail{
+		NumPartitions:     10,
+		ReplicationFactor: 1,
+	}, false)
+
+	fmt.Println("First create topic:", err)
+
+	err = admin.CreateTopic(topic, &sarama.TopicDetail{
+		NumPartitions:     10,
+		ReplicationFactor: 3,
+	}, false)
+	fmt.Println("Second create topic:", err)
+}
+
 func TestConsumerGroup(t *testing.T) {
 	brokers := []string{"localhost:9092"}
 	topic := fmt.Sprintf("sample-message-%d", time.Now().Unix())
@@ -23,8 +42,8 @@ func TestConsumerGroup(t *testing.T) {
 	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())
 	assert.NoError(t, err)
 	err = admin.CreateTopic(topic, &sarama.TopicDetail{
-		NumPartitions:     1,
-		ReplicationFactor: 1,
+		NumPartitions:     10,
+		ReplicationFactor: 3,
 	}, false)
 	assert.NoError(t, err)
 
@@ -85,7 +104,9 @@ func TestConsumerGroup(t *testing.T) {
 
 func newConsumerConfig() *sarama.Config {
 	cfg := sarama.NewConfig()
-	cfg.Consumer.Offsets.AutoCommit.Enable = false
+	cfg.Version = sarama.MaxVersion
+	cfg.Consumer.Offsets.AutoCommit.Enable = true
+	cfg.Consumer.Return.Errors = true
 	cfg.Consumer.Offsets.Initial = sarama.OffsetOldest
 	return cfg
 }

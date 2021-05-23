@@ -3,6 +3,7 @@ package jsonmarshal
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Jeffail/gabs/v2"
 	"github.com/jeremywohl/flatten"
 	"log"
 	"regexp"
@@ -42,7 +43,7 @@ func TestNormalConfig(t *testing.T) {
 			License: "my apm license!",
 		},
 	}
-	value, err := toJsonWithMasking(map[string]struct{}{
+	value, err := toJsonWithMasking2(map[string]struct{}{
 		"apm.license": {},
 	}, c)
 	if err != nil {
@@ -86,6 +87,32 @@ func toJsonWithMasking(maskKeys map[string]struct{}, cfg interface{}) (string, e
 	}
 
 	data, err = json.MarshalIndent(&m, "", "    ")
+	if err != nil {
+		return "", err
+	}
+	return string(data), nil
+}
+
+func toJsonWithMasking2(maskKeys map[string]struct{}, cfg interface{}) (string, error) {
+	data, err := json.Marshal(cfg)
+	if err != nil {
+		return "", err
+	}
+	parsed, err := gabs.ParseJSON(data)
+	if err != nil {
+		return "", err
+	}
+	flat, err := parsed.Flatten()
+	for key, val := range flat {
+		if v, ok := val.(string); ok {
+			flat[key] = maskPassword(v)
+		}
+		if _, ok := maskKeys[key]; ok {
+			flat[key] = "****"
+		}
+	}
+
+	data, err = json.MarshalIndent(&flat, "", "    ")
 	if err != nil {
 		return "", err
 	}

@@ -26,8 +26,8 @@ func TestConsumer(t *testing.T) {
 		time.Sleep(100 * time.Millisecond)
 	}
 	err = admin.CreateTopic(topic, &sarama.TopicDetail{
-		NumPartitions:     1,
-		ReplicationFactor: 1,
+		NumPartitions:     10,
+		ReplicationFactor: 3,
 	}, false)
 	assert.NoError(t, err)
 
