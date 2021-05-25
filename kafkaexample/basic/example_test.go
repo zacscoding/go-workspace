@@ -3,6 +3,7 @@ package basic
 import (
 	"fmt"
 	"github.com/Shopify/sarama"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"sort"
@@ -11,9 +12,37 @@ import (
 	"time"
 )
 
+var (
+	brokers = []string{"localhost:9092"}
+	topic   = "sample-message"
+)
+
+func TestTopics(t *testing.T) {
+	topic = "sample-topic-" + uuid.New().String()
+	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())
+	assert.NoError(t, err)
+	err = admin.CreateTopic(topic, &sarama.TopicDetail{
+		NumPartitions:     10,
+		ReplicationFactor: 1,
+	}, false)
+	assert.NoError(t, err)
+
+	err = admin.CreateTopic(topic, &sarama.TopicDetail{
+		NumPartitions:     10,
+		ReplicationFactor: 1,
+	}, false)
+
+	if terr, ok := err.(*sarama.TopicError); ok {
+		if terr.Err == sarama.ErrTopicAlreadyExists {
+			fmt.Println("sarama.ErrTopicAlreadyExists")
+		} else {
+			fmt.Println("sarama.ErrTopicAlreadyExists is not")
+		}
+	}
+	fmt.Println("ERR: ", err)
+}
+
 func TestConsumer(t *testing.T) {
-	brokers := []string{"localhost:9092"}
-	topic := "sample-message"
 
 	// setup topics by admin
 	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())

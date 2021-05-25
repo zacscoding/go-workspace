@@ -34,6 +34,7 @@ require (
 	github.com/json-iterator/go v1.1.10 // indirect
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/k0kubun/pp v3.0.1+incompatible
+	github.com/labstack/echo/v4 v4.3.0
 	github.com/lib/pq v1.3.0
 	github.com/mattn/go-sqlite3 v1.14.3 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect

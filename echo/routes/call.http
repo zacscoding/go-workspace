@@ -1,0 +1,27 @@
+### Success
+GET http://localhost:8800/api/user
+Accept: application/json
+
+### Not Found
+GET http://localhost:8800/api/user/1
+Accept: application/json
+
+### Bad Request
+GET http://localhost:8800/api/user/2
+Accept: application/json
+
+### Success
+GET http://localhost:8800/api/user/3
+Accept: application/json
+
+### Invalid size
+GET http://localhost:8800/api/user?size=a
+Accept: application/json
+
+### search
+GET http://localhost:8800/api/user/search
+Accept: application/json
+
+### article
+GET http://localhost:8800/api/article
+Accept: application/json
