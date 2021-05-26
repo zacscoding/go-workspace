@@ -41,6 +41,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
+	github.com/reactivex/rxgo/v2 v2.5.0
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
