@@ -1,0 +1,58 @@
+{
+  "block": false,
+  "events": [
+    {
+      "id": "64f51785-defc-4738-9055-78c037b01522",
+      "event": {
+        "severity": "ERR",
+        "group": "consumers1",
+        "start": "Jun 15, 2021 21:21:48 UTC",
+        "complete": 1,
+        "partitions": [
+          {
+            "topic": "test-topic",
+            "partition": 1,
+            "owner": "/172.21.0.1",
+            "client_id": "my-kafka",
+            "status": "STOP",
+            "start": {
+              "offset": 280,
+              "timestamp": 1623759740968,
+              "observedAt": 1623759741000,
+              "lag": 0
+            },
+            "end": {
+              "offset": 298,
+              "timestamp": 1623759745368,
+              "observedAt": 1623759745000,
+              "lag": 0
+            },
+            "current_lag": 218,
+            "complete": 1
+          },
+          {
+            "topic": "test-topic",
+            "partition": 2,
+            "owner": "/172.21.0.1",
+            "client_id": "my-kafka",
+            "status": "STOP",
+            "start": {
+              "offset": 84,
+              "timestamp": 1623759673009,
+              "observedAt": 1623759673000,
+              "lag": 0
+            },
+            "end": {
+              "offset": 99,
+              "timestamp": 1623759678061,
+              "observedAt": 1623759678000,
+              "lag": 0
+            },
+            "current_lag": 419,
+            "complete": 1
+          }
+        ]
+      }
+    }
+  ]
+}

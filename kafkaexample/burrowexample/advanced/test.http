@@ -1,0 +1,26 @@
+### Start producer
+POST http://localhost:8900/v1/producer/p1?topic=test-topic&interval=100ms
+Content-Type: application/json
+
+### Start consumer-1
+POST http://localhost:8900/v1/consumer/c1?topic=test-topic&groupId=consumers1
+Content-Type: application/json
+
+### Start consumer-2
+POST http://localhost:8900/v1/consumer/c2?topic=test-topic&groupId=consumers1
+Content-Type: application/json
+
+### Start consumer-3
+POST http://localhost:8900/v1/consumer/c3?topic=test-topic&groupId=consumers1
+Content-Type: application/json
+
+### Start fail to consume at c1. POST /v1/event called from burrow after a few seconds later
+PUT http://localhost:8900/v1/consumer/c1?topic=test-topic&shouldFail=true
+Content-Type: application/json
+
+### Check consumer status from burrow
+GET http://localhost:8000/v3/kafka/local/consumer/consumers1/status
+
+### Start success to consume at c1. DELETE /v1/event called from burrow after a few seconds later
+PUT http://localhost:8900/v1/consumer/c1?topic=test-topic&shouldFail=false
+Content-Type: application/json
