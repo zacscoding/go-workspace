@@ -23,6 +23,7 @@ require (
 	github.com/go-redsync/redsync/v4 v4.0.3
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-testfixtures/testfixtures/v3 v3.5.0
+	github.com/go-zookeeper/zk v1.0.2
 	github.com/gojektech/heimdall/v6 v6.1.0
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
