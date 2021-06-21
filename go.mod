@@ -3,9 +3,10 @@ module go-workspace
 go 1.14
 
 require (
-	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
+	github.com/HdrHistogram/hdrhistogram-go v1.1.0 // indirect
 	github.com/Jeffail/gabs/v2 v2.6.0
 	github.com/Shopify/sarama v1.27.1
+	github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5 // indirect
 	github.com/alicebob/miniredis/v2 v2.13.2
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
 	github.com/bsm/redislock v0.5.0
@@ -25,6 +26,7 @@ require (
 	github.com/go-testfixtures/testfixtures/v3 v3.5.0
 	github.com/go-zookeeper/zk v1.0.2
 	github.com/gojektech/heimdall/v6 v6.1.0
+	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
@@ -45,16 +47,19 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/reactivex/rxgo/v2 v2.5.0
 	github.com/sethvargo/go-retry v0.1.0
+	github.com/smartystreets/goconvey v1.6.4 // indirect
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
-	github.com/stretchr/testify v1.6.1
+	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/uber/jaeger-lib v2.4.0+incompatible // indirect
 	github.com/valyala/fasthttp v1.19.0
+	go.opencensus.io v0.22.2 // indirect
 	go.uber.org/fx v1.13.1
 	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
+	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a // indirect
 	google.golang.org/grpc v1.36.1
 	google.golang.org/protobuf v1.25.0
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
