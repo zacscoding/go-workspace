@@ -1,8 +1,9 @@
-package cacheredis
+package custom
 
 import (
+	"context"
 	"fmt"
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -43,6 +44,7 @@ var (
 // HGet articles t-articles1
 // HGet articles t-articles2
 func TestHSet(t *testing.T) {
+	ctx := context.Background()
 	server, err := NewInmemoryRedisServer()
 	assert.NoError(t, err)
 	client, err := NewRedisClient(&redis.Options{
@@ -50,20 +52,20 @@ func TestHSet(t *testing.T) {
 		Password: "",
 	})
 
-	err = client.HSet("articles", "t-"+article1.Title, article1, 1*time.Second)
+	err = client.HSet(ctx, "articles", "t-"+article1.Title, article1, 1*time.Second)
 	assert.NoError(t, err)
 
-	err = client.HSet("articles", "t-"+article2.Title, article2, 1*time.Second)
+	err = client.HSet(ctx, "articles", "t-"+article2.Title, article2, 1*time.Second)
 	assert.NoError(t, err)
 
 	var (
 		find1, find2 Article
 	)
-	err = client.HGet("articles", "t-"+article1.Title, &find1)
+	err = client.HGet(ctx, "articles", "t-"+article1.Title, &find1)
 	assert.NoError(t, err)
 	assert.Equal(t, article1, &find1)
 
-	err = client.HGet("articles", "t-"+article2.Title, &find2)
+	err = client.HGet(ctx, "articles", "t-"+article2.Title, &find2)
 	assert.NoError(t, err)
 	assert.Equal(t, article2, &find2)
 }
@@ -72,6 +74,7 @@ func TestHSet(t *testing.T) {
 // HSet articles t-articles1 article1
 // HKeys articles
 func TestHSetFields(t *testing.T) {
+	ctx := context.Background()
 	server, err := NewInmemoryRedisServer()
 	assert.NoError(t, err)
 	client, err := NewRedisClient(&redis.Options{
@@ -79,10 +82,10 @@ func TestHSetFields(t *testing.T) {
 		Password: "",
 	})
 
-	err = client.HSet("articles", "t-"+article1.Title, article1, 1*time.Second)
+	err = client.HSet(ctx, "articles", "t-"+article1.Title, article1, 1*time.Second)
 	assert.NoError(t, err)
 
-	keysResult := client.cli.HKeys("articles")
+	keysResult := client.cli.HKeys(ctx, "articles")
 	keys, err := keysResult.Val(), keysResult.Err()
 	assert.NoError(t, err)
 	assert.Equal(t, 1, len(keys))
@@ -90,6 +93,7 @@ func TestHSetFields(t *testing.T) {
 }
 
 func TestHGetHDelete(t *testing.T) {
+	ctx := context.Background()
 	server, err := NewInmemoryRedisServer()
 	assert.NoError(t, err)
 	client, err := NewRedisClient(&redis.Options{
@@ -97,30 +101,31 @@ func TestHGetHDelete(t *testing.T) {
 		Password: "",
 	})
 
-	getResult := client.cli.HGet("articles", "t-"+article1.Title)
+	getResult := client.cli.HGet(ctx, "articles", "t-"+article1.Title)
 	value, err := getResult.Val(), getResult.Err()
 	assert.Error(t, err)
 	assert.Empty(t, value)
 
-	delResult := client.cli.HDel("articles", "t-"+article1.Title)
+	delResult := client.cli.HDel(ctx, "articles", "t-"+article1.Title)
 	rows, err := delResult.Val(), delResult.Err()
 	assert.NoError(t, err)
 	assert.Equal(t, int64(0), rows)
 }
 
 func TestKeysPattern(t *testing.T) {
+	ctx := context.Background()
 	server, err := NewInmemoryRedisServer()
 	assert.NoError(t, err)
 	client, err := NewRedisClient(&redis.Options{
 		Addr:     server.Addr(),
 		Password: "",
 	})
-	client.HSet("key1:addr:addr1", "field:field1", "key1:addr:addr1+field:field1", time.Second)
-	client.HSet("key1:addr:addr2", "field:field1", "key1:addr:addr2+field:field1", time.Second)
-	client.HSet("key1:addr:addr3", "field:field2", "key1:addr:addr3+field:field2", time.Second)
-	client.HSet("key1:noaddr:addr3", "field:field2", "key1:noaddr:addr3+field:field2", time.Second)
+	client.HSet(ctx, "key1:addr:addr1", "field:field1", "key1:addr:addr1+field:field1", time.Second)
+	client.HSet(ctx, "key1:addr:addr2", "field:field1", "key1:addr:addr2+field:field1", time.Second)
+	client.HSet(ctx, "key1:addr:addr3", "field:field2", "key1:addr:addr3+field:field2", time.Second)
+	client.HSet(ctx, "key1:noaddr:addr3", "field:field2", "key1:noaddr:addr3+field:field2", time.Second)
 
-	keys, err := client.cli.Keys("key1:addr:*").Result()
+	keys, err := client.cli.Keys(ctx, "key1:addr:*").Result()
 	assert.NoError(t, err)
 	for _, key := range keys {
 		fmt.Println("## Key:", key)

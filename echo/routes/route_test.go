@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"github.com/labstack/echo-contrib/jaegertracing"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"log"
@@ -39,6 +40,8 @@ var (
 )
 
 func TestEchoRoutes(t *testing.T) {
+	jaegertracing.New()
+
 	e := echo.New()
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())

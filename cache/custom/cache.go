@@ -1,9 +1,10 @@
-package cacheredis
+package custom
 
 import (
+	"context"
 	"encoding/json"
 	"github.com/alicebob/miniredis/v2"
-	"github.com/go-redis/redis/v7"
+	"github.com/go-redis/redis/v8"
 	"time"
 )
 
@@ -11,7 +12,7 @@ type RedisClient struct {
 	cli *redis.Client
 }
 
-func (c *RedisClient) HSet(key, field string, v interface{}, ttl time.Duration) error {
+func (c *RedisClient) HSet(ctx context.Context, key, field string, v interface{}, ttl time.Duration) error {
 	var valueString string
 	if _, ok := v.(string); ok {
 		valueString = v.(string)
@@ -24,14 +25,14 @@ func (c *RedisClient) HSet(key, field string, v interface{}, ttl time.Duration) 
 	}
 
 	pipe := c.cli.Pipeline()
-	pipe.HSet(key, field, valueString)
-	pipe.Expire(key, ttl)
-	_, err := pipe.Exec()
+	pipe.HSet(ctx, key, field, valueString)
+	pipe.Expire(ctx, key, ttl)
+	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (c *RedisClient) HGet(key, field string, v interface{}) error {
-	ret := c.cli.HGet(key, field)
+func (c *RedisClient) HGet(ctx context.Context, key, field string, v interface{}) error {
+	ret := c.cli.HGet(ctx, key, field)
 	value, err := ret.Val(), ret.Err()
 	if err != nil {
 		return err
@@ -46,7 +47,7 @@ func (c *RedisClient) HGet(key, field string, v interface{}) error {
 
 func NewRedisClient(opt *redis.Options) (*RedisClient, error) {
 	rdb := redis.NewClient(opt)
-	if err := rdb.Ping().Err(); err != nil {
+	if err := rdb.Ping(context.Background()).Err(); err != nil {
 		return nil, err
 	}
 	return &RedisClient{cli: rdb}, nil
