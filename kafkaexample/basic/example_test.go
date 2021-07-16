@@ -5,7 +5,9 @@ import (
 	"github.com/Shopify/sarama"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
+	"log"
 	"math/rand"
+	"os"
 	"sort"
 	"strconv"
 	"testing"
@@ -18,6 +20,7 @@ var (
 )
 
 func TestTopics(t *testing.T) {
+	sarama.Logger = log.New(os.Stdout, "[Sarama] ", log.LstdFlags)
 	topic = "sample-topic-" + uuid.New().String()
 	admin, err := sarama.NewClusterAdmin(brokers, sarama.NewConfig())
 	assert.NoError(t, err)

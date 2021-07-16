@@ -24,6 +24,7 @@ var (
 )
 
 func main() {
+	sarama.Logger = log.New(os.Stdout, "[Sarama] ", log.LstdFlags)
 	srv := NewServer()
 	go func() {
 		if err := srv.Start(":8900"); err != nil {
