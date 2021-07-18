@@ -3,7 +3,6 @@ module go-workspace
 go 1.14
 
 require (
-	github.com/99designs/gqlgen v0.13.0
 	github.com/Jeffail/gabs/v2 v2.6.0
 	github.com/Shopify/sarama v1.27.1
 	github.com/alicebob/miniredis/v2 v2.13.2
@@ -19,9 +18,10 @@ require (
 	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-redis/cache/v8 v8.4.1
+	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v7 v7.4.0
 	github.com/go-redis/redis/v8 v8.4.4
-	github.com/go-redsync/redsync/v4 v4.0.3
+	github.com/go-redsync/redsync/v4 v4.0.4
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/go-testfixtures/testfixtures/v3 v3.5.0
 	github.com/go-zookeeper/zk v1.0.2
@@ -51,7 +51,6 @@ require (
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/valyala/fasthttp v1.19.0
-	github.com/vektah/gqlparser/v2 v2.1.0
 	go.uber.org/fx v1.13.1
 	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
