@@ -7,12 +7,14 @@ require (
 	github.com/Shopify/sarama v1.27.1
 	github.com/alicebob/miniredis/v2 v2.13.2
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
+	github.com/brianvoe/gofakeit/v6 v6.7.0
 	github.com/bsm/redislock v0.5.0
 	github.com/cloudevents/sdk-go/protocol/kafka_sarama/v2 v2.3.1
 	github.com/cloudevents/sdk-go/v2 v2.3.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.9.0
 	github.com/gammazero/workerpool v1.1.1
+	github.com/gavv/httpexpect/v2 v2.3.1
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
@@ -29,13 +31,12 @@ require (
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
-	github.com/google/uuid v1.1.2
+	github.com/google/uuid v1.2.0
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645
 	github.com/hibiken/asynq v0.17.2
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jeremywohl/flatten v1.0.1
 	github.com/jinzhu/gorm v1.9.15
-	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/k0kubun/pp v3.0.1+incompatible
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.3.0
@@ -50,7 +51,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
-	github.com/valyala/fasthttp v1.19.0
+	github.com/valyala/fasthttp v1.27.0
 	go.uber.org/fx v1.13.1
 	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
