@@ -52,7 +52,7 @@ require (
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.6.0
+	github.com/tidwall/gjson v1.6.5
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/valyala/fasthttp v1.27.0
 	go.uber.org/fx v1.13.1
