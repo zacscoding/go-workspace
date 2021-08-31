@@ -1,0 +1,5 @@
+servers:
+  userserver:
+    writeTimeout: "5m"
+  productserver:
+    port: 8092

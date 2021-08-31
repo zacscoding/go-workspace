@@ -1,4 +1,4 @@
-package jsondecode
+package gabsexample
 
 import (
 	"encoding/json"

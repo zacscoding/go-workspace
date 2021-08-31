@@ -1,0 +1,15 @@
+servers:
+  userserver:
+    port: 8080
+    readTimeout: 1s
+    writeTimeout: 1m
+  productserver:
+    port: 8090
+    readTimeout: 3s
+    writeTimeout: 3m
+  db:
+    dataSourceName: root:password@tcp(127.0.0.1:3306)/local_db?charset=utf8&parseTime=True&multiStatements=true
+    pool:
+      maxIdle: 20
+      maxOpen: 10
+      maxLifetime: 86400s

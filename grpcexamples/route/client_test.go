@@ -26,6 +26,18 @@ type ClientSuite struct {
 	cli        pb.PersonRouteClient
 }
 
+func (s *ClientSuite) TestGetPersonWithMonitoring() {
+	conns := make(chan *grpc.ClientConn, 50)
+
+	for i := 0; i < 50; i++ {
+		conn, err := grpc.Dial(clientAddr, grpc.WithInsecure(), grpc.WithBlock())
+		s.NoError(err)
+		conns <- conn
+	}
+
+	time.Sleep(time.Minute)
+}
+
 func (s *ClientSuite) TestGetPerson() {
 	// when
 	resp, err := s.cli.GetPerson(context.Background(), &pb.PersonQuery{

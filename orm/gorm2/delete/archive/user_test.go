@@ -1,4 +1,4 @@
-package delete
+package archive
 
 import (
 	"errors"
@@ -177,14 +177,55 @@ func TestSolution2_User(t *testing.T) {
 	fmt.Println(">> After delete:", find.String())
 }
 
+func TestSolution3_User(t *testing.T) {
+	db := NewDB(t)
+	getUser := func(id uint) *Sol3User {
+		var (
+			find Sol3User
+		)
+		if err := db.First(&find, id).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return nil
+			}
+			t.Fatalf("find user:%v", err)
+		}
+		return &find
+	}
+
+	var findUsers []*Sol3User
+	if err := db.Find(&findUsers).Error; err != nil {
+		t.Fatalf("find users: %v", err)
+	}
+
+	// save
+	u := Sol3User{
+		Name: "user1",
+	}
+	if err := db.Save(&u).Error; err != nil {
+		t.Fatalf("save an user:%v", err)
+	}
+	find := getUser(u.ID)
+	fmt.Println(">> After save:", find.String())
+
+	// delete
+	if err := db.Delete(find).Error; err != nil {
+		t.Fatalf("delete an user:%v", err)
+	}
+	find = getUser(u.ID)
+	fmt.Println(">> After delete:", find)
+	// Output
+	// >> After save: Sol1User{ID:1, CreatedAt:2020-10-11 20:40:34.855 +0900 KST, UpdatedAt:2020-10-11 20:40:34.855 +0900 KST, DeletedAtUnix:0, Name:user1}
+	// >> After delete: Sol1User{ID:1, CreatedAt:2020-10-11 20:40:34.855 +0900 KST, UpdatedAt:2020-10-11 20:40:34.862 +0900 KST, DeletedAtUnix:1602416434, Name:user1}
+}
+
 func NewDB(t *testing.T) *gorm.DB {
 	dsn := "root:password@tcp(127.0.0.1:13306)/my_database?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.New(
 			log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
 			logger.Config{
-				SlowThreshold: time.Second,   // Slow SQL threshold
-				LogLevel:      logger.Silent, // Log level
+				SlowThreshold: time.Second, // Slow SQL threshold
+				LogLevel:      logger.Info, // Log level
 				Colorful:      true,
 			},
 		),
@@ -196,6 +237,7 @@ func NewDB(t *testing.T) *gorm.DB {
 		&EmbeddedUser{},
 		&Sol1User{},
 		&Sol2User{},
+		&Sol3User{},
 	}
 
 	if err := db.Migrator().DropTable(models...); err != nil {

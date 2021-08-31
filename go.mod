@@ -15,6 +15,7 @@ require (
 	github.com/fatih/color v1.9.0
 	github.com/gammazero/workerpool v1.1.1
 	github.com/gavv/httpexpect/v2 v2.3.1
+	github.com/getkin/kin-openapi v0.74.0
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/assert/v2 v2.0.1
@@ -32,16 +33,18 @@ require (
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
 	github.com/google/uuid v1.2.0
+	github.com/gorilla/websocket v1.4.2
 	github.com/grpc-ecosystem/grpc-opentracing v0.0.0-20180507213350-8e809c8a8645
 	github.com/hibiken/asynq v0.17.2
+	github.com/huandu/xstrings v1.3.2
 	github.com/jedib0t/go-pretty/v6 v6.1.0
 	github.com/jeremywohl/flatten v1.0.1
 	github.com/jinzhu/gorm v1.9.15
 	github.com/k0kubun/pp v3.0.1+incompatible
+	github.com/knadh/koanf v1.2.1
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.3.0
 	github.com/lib/pq v1.3.0
-	github.com/mattn/go-sqlite3 v1.14.3 // indirect
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/reactivex/rxgo/v2 v2.5.0
@@ -61,6 +64,7 @@ require (
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
 	gorm.io/driver/mysql v1.0.3
-	gorm.io/gorm v1.20.11
+	gorm.io/gorm v1.21.7
 	gorm.io/plugin/dbresolver v1.1.0
+	gorm.io/plugin/soft_delete v1.0.2
 )

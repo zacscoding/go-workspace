@@ -6,6 +6,7 @@ import (
 	pb "go-workspace/grpcexamples/route/person"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 	"io"
 	"log"
@@ -27,6 +28,7 @@ func StartServer(addr string) (*Server, error) {
 		return nil, err
 	}
 	s := grpc.NewServer()
+	reflection.Register(s)
 	server := &Server{
 		s: s,
 		r: person.NewRepository(),

@@ -1,8 +1,9 @@
-package delete
+package archive
 
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
 	"time"
 )
 
@@ -44,4 +45,17 @@ func (u *Sol2User) String() string {
 
 func (u *Sol2User) IsActive() bool {
 	return u.Active != nil && *u.Active
+}
+
+type Sol3User struct {
+	ID        uint                  `json:"id" gorm:"primarykey"`
+	CreatedAt time.Time             `json:"createdAt"`
+	UpdatedAt time.Time             `json:"updatedAt"`
+	Name      string                `gorm:"size:256;uniqueIndex:idx_name_deleted_at_unix"`
+	DeletedAt soft_delete.DeletedAt `gorm:"uniqueIndex:idx_name_deleted_at_unix"`
+}
+
+func (u *Sol3User) String() string {
+	return fmt.Sprintf("Sol3User{ID:%d, CreatedAt:%v, UpdatedAt:%v, Name:%s, DeletedAt: %v}",
+		u.ID, u.CreatedAt, u.UpdatedAt, u.Name, u.DeletedAt)
 }
