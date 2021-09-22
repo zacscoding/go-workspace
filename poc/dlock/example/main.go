@@ -4,9 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-zookeeper/zk"
-	"github.com/google/uuid"
 	"go-workspace/poc/dlock"
-	"go-workspace/poc/dlock/zookeeper"
+	"go-workspace/poc/dlock/zklock"
 	"log"
 	"math/rand"
 	"sort"
@@ -19,17 +18,21 @@ var (
 	lockTimeoutMills   = 3000
 )
 
+type BeforeCloseFn func(key string)
+
 func main() {
 	// Setup
 	var (
-		key      = uuid.NewString()[:4] + "/task1"
-		registry dlock.LockRegistry
-		err      error
-		resource = &stubResouce{sleepMills: resourceUsingMills}
-		workers  []*worker
-		wg       = sync.WaitGroup{}
+		// key           = "/" + uuid.NewString()[:4] + "/task1"
+		key           = "/task1"
+		registry      dlock.LockRegistry
+		beforeCloseFn BeforeCloseFn
+		err           error
+		resource      = &stubResouce{sleepMills: resourceUsingMills}
+		workers       []*worker
+		wg            = sync.WaitGroup{}
 	)
-	registry, err = newZKRegistry()
+	registry, beforeCloseFn, err = newZKRegistry()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -100,23 +103,44 @@ func main() {
 		log.Println(">", string(b))
 	}
 	log.Printf("Success Workers: %d, Failure Workers: %d", len(successes), len(failures))
+
+	if beforeCloseFn != nil {
+		beforeCloseFn(key)
+	}
 }
 
-func newZKRegistry() (dlock.LockRegistry, error) {
+func newZKRegistry() (dlock.LockRegistry, BeforeCloseFn, error) {
 	var (
 		zkServers = []string{"localhost:2181"}
 	)
 
 	conn, eventCH, err := zk.Connect(zkServers, time.Minute, zk.WithLogger(&zkLogger{}))
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	for e := range eventCH {
 		if e.Type == zk.EventSession && e.State == zk.StateConnected {
 			break
 		}
 	}
-	return zookeeper.NewZKLockRegistry(conn, zookeeper.WithLogger(&dlock.StdLogger{})), nil
+
+	beforeCloseFn := func(key string) {
+		defer conn.Close()
+		log.Println("Check children:", key)
+		children, _, err := conn.Children(key)
+		if err != nil {
+			if err != zk.ErrNoNode {
+				log.Println("failed to get children. err:", err)
+			}
+			log.Println("empty children")
+			return
+		}
+		log.Printf("> children: #%d", len(children))
+		for c := range children {
+			log.Println("> ", c)
+		}
+	}
+	return zklock.NewZKLockRegistry(conn, zklock.WithLogger(&dlock.StdLogger{})), beforeCloseFn, nil
 }
 
 type zkLogger struct {

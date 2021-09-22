@@ -52,7 +52,7 @@ func (w *worker) doWork(startSleepMills int) {
 	defer cancel()
 
 	w.result.AttemptAt = now()
-	err := lock.Lock(ctx)
+	err := lock.Lock(ctx, 0)
 	if err != nil {
 		w.result.FailureAt = now()
 		w.result.ErrLock = err.Error()

@@ -1,4 +1,4 @@
-package zookeeper
+package zklock
 
 import (
 	"context"
@@ -7,6 +7,8 @@ import (
 	"go-workspace/poc/dlock"
 	"strconv"
 	"strings"
+	"sync/atomic"
+	"time"
 )
 
 const (
@@ -14,6 +16,11 @@ const (
 	flagPersistentSequential = 2
 	flagEphemeral            = 1
 	flagEphemeralSequential  = 3
+)
+
+const (
+	stateNoLock = 0
+	stateLock   = 1
 )
 
 const (
@@ -34,17 +41,25 @@ func WithLogger(l dlock.Logger) Option {
 	}
 }
 
+func WithDefaultTTL(ttl time.Duration) Option {
+	return func(r *zkLockRegistry) {
+		r.defaultTTL = ttl
+	}
+}
+
 type zkLockRegistry struct {
-	conn   *zk.Conn
-	acls   []zk.ACL
-	logger dlock.Logger
+	conn       *zk.Conn
+	acls       []zk.ACL
+	logger     dlock.Logger
+	defaultTTL time.Duration
 }
 
 func NewZKLockRegistry(conn *zk.Conn, opts ...Option) dlock.LockRegistry {
 	registry := zkLockRegistry{
-		conn:   conn,
-		acls:   zk.WorldACL(zk.PermAll),
-		logger: &dlock.NoopLogger{},
+		conn:       conn,
+		acls:       zk.WorldACL(zk.PermAll),
+		logger:     &dlock.NoopLogger{},
+		defaultTTL: dlock.DefaultLockTTL,
 	}
 	for _, opt := range opts {
 		opt(&registry)
@@ -61,6 +76,7 @@ func (z *zkLockRegistry) NewLock(key string) dlock.Lock {
 		path:   key,
 		acls:   zk.WorldACL(zk.PermAll),
 		logger: z.logger,
+		ttl:    z.defaultTTL,
 	}
 }
 
@@ -69,19 +85,27 @@ type ZKLock struct {
 	path   string
 	acls   []zk.ACL
 	logger dlock.Logger
+	ttl    time.Duration
+
+	acquired int32
 	// lockPath is setted after acquiring a lock.
-	lockPath string
-	seq      int
+	lockPath    string
+	seq         int
+	unlockTimer *time.Timer
+	timerStopCH chan struct{}
 }
 
-func (zl *ZKLock) Lock(ctx context.Context) error {
-	return zl.LockWithData(ctx, []byte{})
+func (zl *ZKLock) Lock(ctx context.Context, ttl time.Duration) error {
+	return zl.LockWithData(ctx, ttl, []byte{})
 }
 
-func (zl *ZKLock) LockWithData(ctx context.Context, data []byte) error {
+func (zl *ZKLock) LockWithData(ctx context.Context, ttl time.Duration, data []byte) error {
 	// client tried to acquire lock twice
-	if zl.lockPath != "" {
+	if zl.isAcquired() {
 		return dlock.ErrDeadlock
+	}
+	if ttl == 0 {
+		ttl = zl.ttl
 	}
 
 	var (
@@ -192,28 +216,68 @@ func (zl *ZKLock) LockWithData(ctx context.Context, data []byte) error {
 			return dlock.ErrTimeoutAcquireLock
 		}
 	}
+
+	// check context is done or not
 	if isDone(ctx) {
-		zl.Unlock()
+		zl.unlock()
 		return dlock.ErrTimeoutAcquireLock
 	}
+
+	atomic.CompareAndSwapInt32(&zl.acquired, stateNoLock, stateLock)
 	zl.seq = seq
 	zl.lockPath = path
+	zl.unlockTimer = time.NewTimer(ttl)
+	zl.timerStopCH = make(chan struct{}, 1)
+	go func() {
+		select {
+		case <-zl.unlockTimer.C:
+			zl.unlock()
+		case <-zl.timerStopCH:
+		}
+	}()
 	return nil
 }
 
+func (zl *ZKLock) Extend() (bool, error) {
+	if !zl.isAcquired() {
+		return false, dlock.ErrNotLocked
+	}
+	return zl.unlockTimer.Reset(zl.ttl), nil
+}
+
 func (zl *ZKLock) Unlock() error {
-	if zl.lockPath == "" {
+	if !zl.isAcquired() {
 		return dlock.ErrNotLocked
 	}
+	zl.unlockTimer.Stop()
+	close(zl.timerStopCH)
+	return zl.unlock()
+}
+
+func (zl *ZKLock) unlock() error {
 	if err := zl.conn.Delete(zl.lockPath, -1); err != nil {
 		if err == zk.ErrNoNode {
+			zl.clearLockContexts()
 			return dlock.ErrNotLocked
 		}
 		return err
 	}
+	zl.clearLockContexts()
+	return nil
+}
+
+func (zl *ZKLock) clearLockContexts() {
+	if !atomic.CompareAndSwapInt32(&zl.acquired, stateLock, stateNoLock) {
+		return
+	}
 	zl.lockPath = ""
 	zl.seq = 0
-	return nil
+	zl.unlockTimer = nil
+	zl.timerStopCH = nil
+}
+
+func (zl *ZKLock) isAcquired() bool {
+	return atomic.LoadInt32(&zl.acquired) == stateLock
 }
 
 func isDone(ctx context.Context) bool {

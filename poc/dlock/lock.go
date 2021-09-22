@@ -1,15 +1,21 @@
 package dlock
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
-// TODO: add TTL / extend lease
+const (
+	DefaultLockTTL = time.Second * 5
+)
 
 type LockRegistry interface {
 	NewLock(key string) Lock
 }
 
 type Lock interface {
-	Lock(ctx context.Context) error
-	LockWithData(ctx context.Context, data []byte) error
+	Lock(ctx context.Context, ttl time.Duration) error
+	LockWithData(ctx context.Context, ttl time.Duration, data []byte) error
+	Extend() (bool, error)
 	Unlock() error
 }
