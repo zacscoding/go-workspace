@@ -1,0 +1,26 @@
+stage: "config.yaml"
+
+logging:
+  # -1: Debug, 0: Info, 1: Warn, 2: Error, 4: Panic, 5: Fatal
+  level: -1
+  # "console", "json"
+  encoding: "console"
+
+server:
+  port: 8080
+  read-timeout: 5s
+  write-timeout: 5m
+  endpoints:
+    - "config.yaml-1"
+    - "config.yaml-2"
+
+db:
+  data-source-name: root:p@ssw0rd@(localhost:43306)/local_db?charset=utf8&parseTime=True&multiStatements=true
+  migrate:
+    enable: false
+    dir: migrations/
+  pool:
+    max-open: 50
+    max-idle: 5
+    max-lifetime: 86400s
+

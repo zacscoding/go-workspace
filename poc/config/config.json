@@ -1,0 +1,12 @@
+{
+  "stage": "config.json",
+  "logging": {
+    "level": -1,
+    "encoding": "console"
+  },
+  "server": {
+    "port": 8080,
+    "read-timeout": "5s",
+    "write-timeout": "5m"
+  }
+}
