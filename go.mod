@@ -9,6 +9,7 @@ require (
 	github.com/asaskevich/EventBus v0.0.0-20200428142821-4fc0642a29f3
 	github.com/brianvoe/gofakeit/v6 v6.7.0
 	github.com/bsm/redislock v0.5.0
+	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/cloudevents/sdk-go/protocol/kafka_sarama/v2 v2.3.1
 	github.com/cloudevents/sdk-go/v2 v2.3.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible

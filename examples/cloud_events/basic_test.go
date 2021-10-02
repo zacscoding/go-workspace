@@ -38,7 +38,6 @@ func TestHttpServerAndClient(t *testing.T) {
 	e.SetData(cloudevents.ApplicationJSON, map[string]interface{}{
 		"message": "Hello CloudEvents :)",
 	})
-
 	ctx := cloudevents.ContextWithTarget(context.Background(), server.URL)
 	if result := c.Send(ctx, e); cloudevents.IsUndelivered(result) {
 		log.Fatalf("failed to send. err:%v", result)
