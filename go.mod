@@ -19,6 +19,7 @@ require (
 	github.com/getkin/kin-openapi v0.74.0
 	github.com/gin-contrib/pprof v1.3.0
 	github.com/gin-gonic/gin v1.6.3
+	github.com/gizak/termui/v3 v3.1.0
 	github.com/go-playground/assert/v2 v2.0.1
 	github.com/go-playground/validator/v10 v10.2.0
 	github.com/go-redis/cache/v8 v8.4.1
@@ -46,12 +47,14 @@ require (
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.3.0
 	github.com/lib/pq v1.3.0
+	github.com/manifoldco/promptui v0.9.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
 	github.com/reactivex/rxgo/v2 v2.5.0
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/sony/gobreaker v0.4.1
 	github.com/speps/go-hashids v2.0.0+incompatible
+	github.com/spf13/cobra v0.0.3
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
