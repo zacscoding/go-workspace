@@ -18,10 +18,10 @@ require (
 	github.com/gavv/httpexpect/v2 v2.3.1
 	github.com/getkin/kin-openapi v0.74.0
 	github.com/gin-contrib/pprof v1.3.0
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.0
 	github.com/gizak/termui/v3 v3.1.0
 	github.com/go-playground/assert/v2 v2.0.1
-	github.com/go-playground/validator/v10 v10.2.0
+	github.com/go-playground/validator/v10 v10.4.1
 	github.com/go-redis/cache/v8 v8.4.1
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v7 v7.4.0
