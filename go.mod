@@ -12,6 +12,7 @@ require (
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e
 	github.com/cloudevents/sdk-go/protocol/kafka_sarama/v2 v2.3.1
 	github.com/cloudevents/sdk-go/v2 v2.3.1
+	github.com/deathowl/go-metrics-prometheus v0.0.0-20200518174047-74482eab5bfb
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fatih/color v1.9.0
 	github.com/gammazero/workerpool v1.1.1
@@ -31,6 +32,7 @@ require (
 	github.com/go-testfixtures/testfixtures/v3 v3.5.0
 	github.com/go-zookeeper/zk v1.0.2
 	github.com/gojektech/heimdall/v6 v6.1.0
+	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/google/go-github/v33 v33.0.0
 	github.com/google/go-querystring v1.0.0
 	github.com/google/gofuzz v1.2.0
@@ -47,9 +49,12 @@ require (
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/labstack/echo/v4 v4.3.0
 	github.com/lib/pq v1.3.0
+	github.com/linkedin/goavro/v2 v2.11.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/pkg/errors v0.9.1
+	github.com/prometheus/client_golang v1.10.0
+	github.com/rcrowley/go-metrics v0.0.0-20200313005456-10cdbea86bc0
 	github.com/reactivex/rxgo/v2 v2.5.0
 	github.com/sethvargo/go-retry v0.1.0
 	github.com/sony/gobreaker v0.4.1
@@ -59,12 +64,17 @@ require (
 	github.com/tidwall/gjson v1.6.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
 	github.com/valyala/fasthttp v1.27.0
+	github.com/vmihailenco/msgpack/v5 v5.1.0
 	go.uber.org/fx v1.13.1
 	go.uber.org/ratelimit v0.1.0
 	go.uber.org/zap v1.15.0
+	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a
+	golang.org/x/net v0.0.0-20220225172249-27dd8689420f // indirect
 	golang.org/x/sync v0.0.0-20201207232520-09787c993a3a
-	google.golang.org/grpc v1.36.1
-	google.golang.org/protobuf v1.25.0
+	golang.org/x/sys v0.0.0-20220310020820-b874c991c1a5 // indirect
+	google.golang.org/genproto v0.0.0-20220314164441-57ef72a4c106 // indirect
+	google.golang.org/grpc v1.45.0
+	google.golang.org/protobuf v1.27.1
 	gopkg.in/go-playground/assert.v1 v1.2.1 // indirect
 	gopkg.in/go-playground/pool.v3 v3.1.1
 	gorm.io/driver/mysql v1.0.3

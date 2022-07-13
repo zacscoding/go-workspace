@@ -1,0 +1,10 @@
+// protoc --go_out=./ person.proto
+syntax = "proto3";
+
+option go_package = "pb/";
+
+message Person {
+  string user_name = 1;
+  optional int64 favorite_number = 2;
+  repeated string interests = 3;
+}
